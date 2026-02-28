@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:docs.goldsky.com)",
+      "WebFetch(domain:thegraph.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm codegen:*)",
+      "Bash(pnpm build:*)"
+    ]
+  }
+}

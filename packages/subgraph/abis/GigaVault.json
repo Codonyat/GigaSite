@@ -1,0 +1,324 @@
+[
+  { "type": "constructor", "inputs": [], "stateMutability": "nonpayable" },
+  {
+    "type": "function", "name": "BASIS_POINTS", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "FEES_POOL", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "address" }]
+  },
+  {
+    "type": "function", "name": "FEE_PERCENT", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "LOTTERY_PERCENT", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "LOT_POOL", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "address" }]
+  },
+  {
+    "type": "function", "name": "MINTING_PERIOD", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "MIN_FEES_FOR_DISTRIBUTION", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "TIME_GAP", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "USDM", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "address" }]
+  },
+  {
+    "type": "function", "name": "USDMY", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "address" }]
+  },
+  { "type": "function", "name": "acceptOwnership", "inputs": [], "outputs": [], "stateMutability": "nonpayable" },
+  {
+    "type": "function", "name": "allowance", "stateMutability": "view",
+    "inputs": [{ "name": "owner", "type": "address" }, { "name": "spender", "type": "address" }],
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "approve", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "spender", "type": "address" }, { "name": "value", "type": "uint256" }],
+    "outputs": [{ "name": "", "type": "bool" }]
+  },
+  {
+    "type": "function", "name": "auctionUnclaimedPrizes", "stateMutability": "view",
+    "inputs": [{ "name": "", "type": "uint256" }],
+    "outputs": [{ "name": "winner", "type": "address" }, { "name": "amount", "type": "uint112" }]
+  },
+  {
+    "type": "function", "name": "balanceOf", "stateMutability": "view",
+    "inputs": [{ "name": "account", "type": "address" }],
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "bid", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "bidAmount", "type": "uint256" }], "outputs": []
+  },
+  {
+    "type": "function", "name": "bidWithUSDm", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "usdmAmount", "type": "uint256" }], "outputs": []
+  },
+  { "type": "function", "name": "claim", "inputs": [], "outputs": [], "stateMutability": "nonpayable" },
+  {
+    "type": "function", "name": "currentAuction", "inputs": [], "stateMutability": "view",
+    "outputs": [
+      { "name": "currentBidder", "type": "address" },
+      { "name": "currentBid", "type": "uint96" },
+      { "name": "minBid", "type": "uint96" },
+      { "name": "auctionTokens", "type": "uint112" },
+      { "name": "auctionDay", "type": "uint32" }
+    ]
+  },
+  {
+    "type": "function", "name": "currentLotteryPool", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "decimals", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint8" }]
+  },
+  {
+    "type": "function", "name": "deploymentTime", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "escrowedBid", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  { "type": "function", "name": "executeLottery", "inputs": [], "outputs": [], "stateMutability": "nonpayable" },
+  {
+    "type": "function", "name": "getAllUnclaimedPrizes", "inputs": [], "stateMutability": "view",
+    "outputs": [
+      { "name": "lotteryWinners", "type": "address[7]" },
+      { "name": "lotteryAmounts", "type": "uint112[7]" },
+      { "name": "auctionWinners", "type": "address[7]" },
+      { "name": "auctionAmounts", "type": "uint112[7]" }
+    ]
+  },
+  {
+    "type": "function", "name": "getCurrentDay", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "getHolderCount", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "getMyClaimableAmount", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "total", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "getReserve", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "lastLotteryDay", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint32" }]
+  },
+  {
+    "type": "function", "name": "maxSupplyEver", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint112" }]
+  },
+  {
+    "type": "function", "name": "mint", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "collateralAmount", "type": "uint256" }], "outputs": []
+  },
+  {
+    "type": "function", "name": "mintWithUSDm", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "usdmAmount", "type": "uint256" }], "outputs": []
+  },
+  {
+    "type": "function", "name": "mintingEndTime", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "name", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "string" }]
+  },
+  {
+    "type": "function", "name": "oneDayEndTime", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "owner", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "address" }]
+  },
+  {
+    "type": "function", "name": "pendingOwner", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "address" }]
+  },
+  {
+    "type": "function", "name": "redeem", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "amount", "type": "uint256" }], "outputs": []
+  },
+  {
+    "type": "function", "name": "redeemToUSDm", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "amount", "type": "uint256" }], "outputs": []
+  },
+  { "type": "function", "name": "renounceOwnership", "inputs": [], "outputs": [], "stateMutability": "pure" },
+  {
+    "type": "function", "name": "symbol", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "string" }]
+  },
+  {
+    "type": "function", "name": "totalSupply", "inputs": [], "stateMutability": "view",
+    "outputs": [{ "name": "", "type": "uint256" }]
+  },
+  {
+    "type": "function", "name": "transfer", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "to", "type": "address" }, { "name": "value", "type": "uint256" }],
+    "outputs": [{ "name": "", "type": "bool" }]
+  },
+  {
+    "type": "function", "name": "transferFrom", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "from", "type": "address" }, { "name": "to", "type": "address" }, { "name": "value", "type": "uint256" }],
+    "outputs": [{ "name": "", "type": "bool" }]
+  },
+  {
+    "type": "function", "name": "transferOwnership", "stateMutability": "nonpayable",
+    "inputs": [{ "name": "newOwner", "type": "address" }], "outputs": []
+  },
+  {
+    "type": "event", "name": "Approval", "anonymous": false,
+    "inputs": [
+      { "name": "owner", "type": "address", "indexed": true },
+      { "name": "spender", "type": "address", "indexed": true },
+      { "name": "value", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "AuctionNoBids", "anonymous": false,
+    "inputs": [
+      { "name": "day", "type": "uint256", "indexed": true },
+      { "name": "rolledOverAmount", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "AuctionStarted", "anonymous": false,
+    "inputs": [
+      { "name": "day", "type": "uint256", "indexed": true },
+      { "name": "tokenAmount", "type": "uint256", "indexed": false },
+      { "name": "minBid", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "AuctionWon", "anonymous": false,
+    "inputs": [
+      { "name": "winner", "type": "address", "indexed": true },
+      { "name": "tokenAmount", "type": "uint256", "indexed": false },
+      { "name": "collateralPaid", "type": "uint256", "indexed": false },
+      { "name": "day", "type": "uint256", "indexed": true }
+    ]
+  },
+  {
+    "type": "event", "name": "BeneficiaryFunded", "anonymous": false,
+    "inputs": [
+      { "name": "beneficiary", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false },
+      { "name": "previousWinner", "type": "address", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "BidPlaced", "anonymous": false,
+    "inputs": [
+      { "name": "bidder", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false },
+      { "name": "day", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "BidRefunded", "anonymous": false,
+    "inputs": [
+      { "name": "bidder", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "FeesDistributed", "anonymous": false,
+    "inputs": [
+      { "name": "day", "type": "uint256", "indexed": true },
+      { "name": "lotteryShare", "type": "uint256", "indexed": false },
+      { "name": "auctionShare", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "LotteryWon", "anonymous": false,
+    "inputs": [
+      { "name": "winner", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false },
+      { "name": "day", "type": "uint256", "indexed": true }
+    ]
+  },
+  {
+    "type": "event", "name": "MaxSupplyLocked", "anonymous": false,
+    "inputs": [{ "name": "maxSupply", "type": "uint256", "indexed": false }]
+  },
+  {
+    "type": "event", "name": "Minted", "anonymous": false,
+    "inputs": [
+      { "name": "to", "type": "address", "indexed": true },
+      { "name": "collateralAmount", "type": "uint256", "indexed": false },
+      { "name": "tokenAmount", "type": "uint256", "indexed": false },
+      { "name": "fee", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "OwnershipTransferStarted", "anonymous": false,
+    "inputs": [
+      { "name": "previousOwner", "type": "address", "indexed": true },
+      { "name": "newOwner", "type": "address", "indexed": true }
+    ]
+  },
+  {
+    "type": "event", "name": "OwnershipTransferred", "anonymous": false,
+    "inputs": [
+      { "name": "previousOwner", "type": "address", "indexed": true },
+      { "name": "newOwner", "type": "address", "indexed": true }
+    ]
+  },
+  {
+    "type": "event", "name": "PrizeClaimed", "anonymous": false,
+    "inputs": [
+      { "name": "winner", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "Redeemed", "anonymous": false,
+    "inputs": [
+      { "name": "from", "type": "address", "indexed": true },
+      { "name": "tokenAmount", "type": "uint256", "indexed": false },
+      { "name": "collateralAmount", "type": "uint256", "indexed": false },
+      { "name": "fee", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "Transfer", "anonymous": false,
+    "inputs": [
+      { "name": "from", "type": "address", "indexed": true },
+      { "name": "to", "type": "address", "indexed": true },
+      { "name": "value", "type": "uint256", "indexed": false }
+    ]
+  },
+  {
+    "type": "event", "name": "UnclaimedPrizeExpired", "anonymous": false,
+    "inputs": [
+      { "name": "previousWinner", "type": "address", "indexed": true },
+      { "name": "amount", "type": "uint256", "indexed": false },
+      { "name": "day", "type": "uint256", "indexed": true },
+      { "name": "slot", "type": "uint256", "indexed": false },
+      { "name": "isLottery", "type": "bool", "indexed": false }
+    ]
+  }
+]

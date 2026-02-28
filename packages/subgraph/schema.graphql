@@ -1,0 +1,91 @@
+enum TransactionType {
+  MINT
+  REDEEM
+  TRANSFER
+}
+
+type Transaction @entity {
+  id: ID! # txHash-logIndex
+  type: TransactionType!
+  user: User!
+  collateralAmount: BigInt!
+  tokenAmount: BigInt!
+  fee: BigInt!
+  timestamp: BigInt!
+  txHash: Bytes!
+  day: BigInt!
+}
+
+type LotteryDraw @entity {
+  id: ID! # day number string
+  winner: User!
+  amount: BigInt!
+  claimed: Boolean!
+  claimTimestamp: BigInt
+  expired: Boolean!
+  beneficiaryAmount: BigInt
+  lotteryShare: BigInt!
+  auctionShare: BigInt!
+}
+
+type AuctionRound @entity {
+  id: ID! # day number string
+  tokenAmount: BigInt!
+  minBid: BigInt!
+  winner: User
+  winningBid: BigInt
+  noBids: Boolean!
+  rolledOverAmount: BigInt
+  claimed: Boolean!
+  bidCount: Int!
+  bids: [Bid!]! @derivedFrom(field: "round")
+}
+
+type Bid @entity {
+  id: ID! # txHash-logIndex
+  round: AuctionRound!
+  bidder: User!
+  amount: BigInt!
+  timestamp: BigInt!
+  refunded: Boolean!
+}
+
+type User @entity {
+  id: ID! # wallet address (hex)
+  totalMinted: BigInt!
+  totalRedeemed: BigInt!
+  totalFeesPaid: BigInt!
+  mintCount: Int!
+  redeemCount: Int!
+  lotteryWinCount: Int!
+  totalLotteryWinnings: BigInt!
+  auctionWinCount: Int!
+  bidCount: Int!
+  totalClaimed: BigInt!
+  transactions: [Transaction!]! @derivedFrom(field: "user")
+}
+
+type ProtocolStats @entity {
+  id: ID! # "protocol" singleton
+  totalSupplyMinted: BigInt!
+  totalSupplyBurned: BigInt!
+  totalFeesCollected: BigInt!
+  totalLotteryPrizes: BigInt!
+  totalAuctionPrizes: BigInt!
+  lotteryCount: Int!
+  auctionCount: Int!
+  totalBids: Int!
+}
+
+type DailyMetric @entity {
+  id: ID! # day number string
+  day: BigInt!
+  mintVolume: BigInt!
+  redeemVolume: BigInt!
+  feesCollected: BigInt!
+  lotteryPrize: BigInt!
+  auctionPrize: BigInt!
+  bidCount: Int!
+  highestBid: BigInt!
+  transactionCount: Int!
+}
