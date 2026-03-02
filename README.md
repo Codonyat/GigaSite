@@ -8,7 +8,8 @@ Full-stack DeFi application for **USDmore** — a token built on MegaETH that co
 packages/
 ├── web/       # React frontend (Vite, Wagmi, RainbowKit, TailwindCSS)
 ├── server/    # Backend API + WebSocket (Hono, Viem, Socket.io)
-└── shared/    # ABIs, types, constants, utilities
+├── shared/    # ABIs, types, constants, utilities
+└── subgraph/  # Graph Protocol subgraph (Goldsky)
 ```
 
 ## Tech Stack
@@ -19,6 +20,7 @@ packages/
 | Backend      | Node.js 22, Hono, Viem, Socket.io                  |
 | Blockchain   | MegaETH (chain ID 6342), Alchemy RPC               |
 | Build        | Turborepo, pnpm workspaces, TypeScript 5.7          |
+| Indexing     | Graph Protocol, Goldsky                             |
 | Deployment   | Docker (Alpine), Railway                            |
 
 ## Getting Started
@@ -79,6 +81,28 @@ This starts all packages concurrently via Turborepo:
 pnpm build
 ```
 
+### Subgraph
+
+The subgraph indexes on-chain events for historical queries (transactions, lottery draws, auction rounds, bids, user stats, daily metrics).
+
+```bash
+cd packages/subgraph
+```
+
+Before building, fill in the placeholders:
+
+| Placeholder | File | Description |
+| --- | --- | --- |
+| Contract address | `subgraph.yaml` | Replace `0x0000...` with the deployed GigaVault address |
+| `startBlock` | `subgraph.yaml` | Set to the contract deployment block number |
+| `DEPLOYMENT_TIME` | `src/helpers.ts` | Set to the `deploymentTime()` value from the contract |
+
+```bash
+pnpm codegen    # Generate AssemblyScript types from schema + ABI
+pnpm build      # Compile to WASM
+pnpm deploy     # Deploy to Goldsky
+```
+
 ### Other Commands
 
 ```bash
@@ -93,8 +117,9 @@ pnpm clean                   # Remove all dist/ folders
 1. **Server** listens for on-chain events (Minted, LotteryWon, BidPlaced, etc.) via WebSocket RPC
 2. Events are broadcast to connected clients through Socket.io
 3. **Web** frontend displays real-time updates in the activity feed and updates UI state
-4. Contract stats are fetched via `/api/stats` (cached with 15s TTL)
-5. RPC calls from the frontend are proxied through `/api/rpc`
+4. **Subgraph** indexes all events for historical queries (auction history, lottery draws, user stats)
+5. Contract stats are fetched via `/api/stats` (cached with 15s TTL)
+6. RPC calls from the frontend are proxied through `/api/rpc`
 
 ### Contract Mechanics
 
