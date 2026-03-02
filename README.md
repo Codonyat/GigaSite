@@ -103,6 +103,27 @@ pnpm build      # Compile to WASM
 pnpm deploy     # Deploy to Goldsky
 ```
 
+#### Local Testing
+
+Test the subgraph locally using an Anvil fork of MegaETH and a local Graph Node. Requires [Foundry](https://book.getfoundry.sh/) and [Docker](https://www.docker.com/).
+
+Start Anvil (forking MegaETH) on port 8545, then:
+
+```bash
+cd packages/subgraph
+pnpm local:up       # Start Graph Node + Postgres + IPFS
+pnpm local:create   # Register subgraph (once)
+pnpm local:deploy   # Build and deploy to local Graph Node
+```
+
+Query at `http://localhost:8000/subgraphs/name/gigavault`.
+
+| Command | Description |
+| --- | --- |
+| `pnpm local:down` | Stop containers (preserves data) |
+| `pnpm local:reset` | Stop containers and delete all data |
+| `pnpm local:remove` | Unregister subgraph from Graph Node |
+
 ### Other Commands
 
 ```bash

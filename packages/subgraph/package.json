@@ -6,7 +6,13 @@
     "codegen": "graph codegen",
     "build": "graph codegen && graph build",
     "clean": "rm -rf generated/ build/",
-    "deploy": "goldsky subgraph deploy gigavault/v1 --path ."
+    "deploy": "goldsky subgraph deploy gigavault/v1 --path .",
+    "local:up": "docker compose up -d",
+    "local:down": "docker compose down",
+    "local:reset": "docker compose down -v",
+    "local:create": "graph create --node http://localhost:8020/ gigavault",
+    "local:deploy": "graph codegen && graph build && graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label v0.0.1 gigavault",
+    "local:remove": "graph remove --node http://localhost:8020/ gigavault"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.93.3",
