@@ -49,25 +49,59 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="font-heading text-3xl font-bold mb-8">Frequently Asked Questions</h1>
-      <div className="space-y-2">
-        {faqs.map((faq, i) => (
-          <div key={i} className="bg-bg-card border border-border rounded-xl overflow-hidden">
-            <button
-              onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              className="w-full flex items-center justify-between p-4 text-left"
+    <div style={{ maxWidth: "var(--max-width)", margin: "0 auto", width: "100%" }}>
+      <div className="page-header-section">
+        <div className="page-header-content">
+          <h1 className="font-heading text-3xl font-bold">FAQ</h1>
+          <p className="page-tagline">Everything you need to know about USDmore</p>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 768, margin: "0 auto", padding: "0 var(--spacing-lg) var(--spacing-2xl)" }}>
+        <div className="space-y-3">
+          {faqs.map((faq, i) => (
+            <div
+              key={i}
+              className="card-base"
+              style={{
+                padding: 0,
+                cursor: "pointer",
+                overflow: "hidden",
+              }}
             >
-              <span className="font-medium">{faq.q}</span>
-              <ChevronDown
-                className={`w-5 h-5 text-text-muted transition-transform ${openIndex === i ? "rotate-180" : ""}`}
-              />
-            </button>
-            {openIndex === i && (
-              <div className="px-4 pb-4 text-sm text-text-secondary leading-relaxed">{faq.a}</div>
-            )}
-          </div>
-        ))}
+              <button
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full flex items-center justify-between p-5 text-left"
+                style={{ background: "transparent", border: "none", color: "inherit", cursor: "pointer", font: "inherit" }}
+              >
+                <span className="font-medium text-text-primary">{faq.q}</span>
+                <ChevronDown
+                  size={20}
+                  style={{
+                    color: "var(--color-text-muted)",
+                    transition: "transform 0.25s ease",
+                    transform: openIndex === i ? "rotate(180deg)" : "rotate(0deg)",
+                    flexShrink: 0,
+                    marginLeft: "1rem",
+                  }}
+                />
+              </button>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateRows: openIndex === i ? "1fr" : "0fr",
+                  transition: "grid-template-rows 0.25s ease",
+                }}
+              >
+                <div style={{ overflow: "hidden" }}>
+                  <div style={{ padding: "0 1.25rem 1.25rem", fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.7 }}>
+                    {faq.a}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

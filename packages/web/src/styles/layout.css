@@ -1,0 +1,63 @@
+/* ========================================
+   Shared Layout Primitives
+   ======================================== */
+
+/* Hero content grid - 2-column layout for Landing and potentially other pages */
+.hero-content-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
+/* Card base - standard card with border, radius, hover transform + glow */
+.card-base {
+  background: var(--color-background-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-base:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+  box-shadow: 0 12px 40px rgba(255, 47, 143, 0.15);
+}
+
+/* Info row - key-value display used in modals and cards */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.625rem 0;
+  font-size: 0.875rem;
+  min-height: 2.5rem;
+}
+
+.info-row:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.info-row span:first-child {
+  color: #909090;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.info-row span:last-child {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  text-align: right;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .hero-content-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+}

@@ -8,13 +8,13 @@ export function LotteryCard() {
   const { data } = useGlobalContractData();
   const { executeLottery, isPending, isConfirming } = useGigaVaultContract();
 
-  if (!data) return <div className="bg-bg-card border border-border rounded-xl p-6 animate-pulse h-48" />;
+  if (!data) return <div className="card-base animate-pulse" style={{ height: 192 }} />;
 
   const nextDayTimestamp = getNextDayTimestamp(contractConstants.deploymentTime, data.currentDay);
   const canDraw = data.currentDay > data.lastLotteryDay;
 
   return (
-    <div className="bg-bg-card border border-border rounded-xl p-6">
+    <div className="card-base">
       <h3 className="font-heading text-lg font-bold mb-4">Daily Lottery</h3>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
@@ -31,23 +31,24 @@ export function LotteryCard() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between mb-4 text-sm">
-        <span className="text-text-muted">Day</span>
-        <span className="text-text-secondary">{data.currentDay}</span>
+      <div className="info-row">
+        <span>Day</span>
+        <span>{data.currentDay}</span>
       </div>
 
-      <div className="flex items-center justify-between mb-4 text-sm">
-        <span className="text-text-muted">Fees Pool</span>
-        <span className="text-text-secondary">{formatUSDmore(data.feesPoolBalance)} USDmore</span>
+      <div className="info-row">
+        <span>Fees Pool</span>
+        <span>{formatUSDmore(data.feesPoolBalance)} USDmore</span>
       </div>
 
       {canDraw && (
         <button
           onClick={() => executeLottery()}
           disabled={isPending || isConfirming}
-          className="w-full py-3 rounded-lg bg-accent-gold text-bg font-medium disabled:opacity-50"
+          className="btn btn-success btn-full"
+          style={{ marginTop: "var(--spacing-md)" }}
         >
-          {isPending || isConfirming ? "Executing..." : "Draw Lottery"}
+          <span>{isPending || isConfirming ? "Executing..." : "Draw Lottery"}</span>
         </button>
       )}
     </div>

@@ -4,44 +4,40 @@ import { getExplorerTxUrl } from "../../config/contract";
 
 interface Props {
   tx: WebSocketTransaction;
+  isNew?: boolean;
 }
 
-const typeColors: Record<string, string> = {
-  MINT: "text-secondary",
-  REDEEM: "text-primary",
-  TRANSFER: "text-text-secondary",
-  BID: "text-accent-orange",
+const typeMap: Record<string, string> = {
+  MINT: "mint",
+  REDEEM: "burn",
+  TRANSFER: "transfer",
+  BID: "bid",
 };
 
 const typeLabels: Record<string, string> = {
   MINT: "Mint",
-  REDEEM: "Redeem",
+  REDEEM: "Burn",
   TRANSFER: "Transfer",
   BID: "Bid",
 };
 
-export function TransactionRow({ tx }: Props) {
+export function TransactionRow({ tx, isNew }: Props) {
   const amount = tx.tokenAmount || tx.collateralAmount || tx.fee || "0";
+  const typeClass = typeMap[tx.type] || "transfer";
 
   return (
-    <div className="flex items-center justify-between py-2 border-b border-border last:border-0 animate-slide-in">
-      <div className="flex items-center gap-3">
-        <span className={`text-xs font-medium px-2 py-0.5 rounded ${typeColors[tx.type]} bg-bg-elevated`}>
-          {typeLabels[tx.type]}
-        </span>
-        <span className="text-sm text-text-secondary">{shortenAddress(tx.user)}</span>
-      </div>
-      <div className="flex items-center gap-3">
-        <span className="text-sm tabular-nums">{formatUSDmore(BigInt(amount))}</span>
-        <a
-          href={getExplorerTxUrl(tx.txHash)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-text-muted hover:text-secondary"
-        >
-          tx
-        </a>
-      </div>
+    <div className={`transaction-row ${typeClass}${isNew ? " new" : ""}`}>
+      <span className="tx-indicator" />
+      <span className="tx-type">{typeLabels[tx.type]}</span>
+      <a
+        href={getExplorerTxUrl(tx.txHash)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="tx-address"
+      >
+        {shortenAddress(tx.user)}
+      </a>
+      <span className="tx-amount">{formatUSDmore(BigInt(amount))}</span>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { formatUSDmore, calculateRedemptionOutput } from "@gigasite/shared";
 import { useUserData } from "../../hooks/useUserData";
 import { useGlobalContractData } from "../../hooks/useGlobalContractData";
 import { useGigaVaultContract } from "../../hooks/useGigaVaultContract";
+import "./TransactionModal.css";
 
 interface Props {
   isOpen: boolean;
@@ -40,82 +41,94 @@ export function RedeemModal({ isOpen, onClose }: Props) {
   const shortcuts = [25, 50, 75, 100];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={onClose}>
-      <div className="bg-bg-card border border-border rounded-xl p-6 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-heading text-lg font-bold">Redeem USDmore</h2>
-          <button onClick={onClose} className="text-text-muted hover:text-text-primary">&times;</button>
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>Redeem USDmore</h2>
+          <button className="modal-close" onClick={onClose}>&times;</button>
         </div>
-
-        <div className="flex gap-2 mb-4">
-          <span className="text-sm text-text-muted py-2">Receive as:</span>
-          {(["USDmY", "USDm"] as const).map((token) => (
-            <button
-              key={token}
-              onClick={() => setOutputToken(token)}
-              className={`px-4 py-2 rounded-lg border text-sm ${
-                outputToken === token ? "border-primary bg-primary/10 text-primary" : "border-border text-text-muted"
-              }`}
-            >
-              {token}
-            </button>
-          ))}
-        </div>
-
-        <div className="bg-bg-elevated rounded-lg p-4 mb-3">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-text-muted">Burn USDmore</span>
-            <span className="text-xs text-text-muted">
-              Balance: {balance !== undefined ? formatUSDmore(balance) : "---"}
-            </span>
-          </div>
-          <input
-            type="text"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="0.00"
-            className="w-full bg-transparent text-2xl font-heading text-text-primary outline-none"
-          />
-          <div className="flex gap-2 mt-2">
-            {shortcuts.map((pct) => (
-              <button
-                key={pct}
-                onClick={() => balance && setAmount(formatUSDmore((balance * BigInt(pct)) / 100n, 18))}
-                className="px-2 py-0.5 text-xs rounded bg-bg-card border border-border text-text-muted hover:text-text-secondary"
-              >
-                {pct}%
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {estimatedOutput > 0n && (
-          <div className="bg-bg-elevated rounded-lg p-3 mb-2 text-sm">
-            <span className="text-text-muted">Expected output: </span>
-            <span className="text-primary font-medium">{formatUSDmore(estimatedOutput)} {outputToken}</span>
-          </div>
-        )}
-
-        {globalData && (
-          <div className="bg-bg-elevated rounded-lg p-3 mb-4 text-sm">
-            <span className="text-text-muted">Backing ratio: </span>
-            <span className="text-text-secondary">{globalData.backingRatio}x</span>
-          </div>
-        )}
 
         {isSuccess ? (
-          <div className="text-center py-4">
-            <p className="text-primary font-medium mb-2">Redemption successful!</p>
-            <button onClick={onClose} className="text-sm text-text-muted hover:text-text-primary">Close</button>
+          <div className="success-view">
+            <div className="success-icon">🔥</div>
+            <h3 className="success-title">Redemption Successful!</h3>
+            <p className="success-message">
+              Your USDmore tokens have been burned and <strong>{outputToken}</strong> returned to your wallet.
+            </p>
+            <div className="success-actions">
+              <button className="close-success-button" onClick={onClose}>Close</button>
+            </div>
           </div>
         ) : (
-          <button
-            onClick={handleRedeem}
-            disabled={isPending || isConfirming || parsedAmount === 0n}
-            className="w-full py-3 rounded-lg bg-primary text-text-primary font-medium disabled:opacity-50"
-          >
-            {isPending ? "Confirming..." : isConfirming ? "Redeeming..." : "Redeem"}
-          </button>
+          <div className="modal-form">
+            <div className="token-toggle">
+              {(["USDmY", "USDm"] as const).map((token) => (
+                <button
+                  key={token}
+                  onClick={() => setOutputToken(token)}
+                  className={`toggle-btn${outputToken === token ? " active" : ""}`}
+                >
+                  Receive {token}
+                </button>
+              ))}
+            </div>
+
+            <div className="form-group">
+              <label>Burn USDmore</label>
+              <div className="input-wrapper">
+                <input
+                  type="text"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="0.00"
+                />
+                <span className="token-symbol">USDmore</span>
+              </div>
+              <div className="balance-row">
+                <span className="balance-info-text">
+                  Balance: <strong>{balance !== undefined ? formatUSDmore(balance) : "---"}</strong>
+                </span>
+                <div className="balance-shortcuts">
+                  {shortcuts.map((pct) => (
+                    <button
+                      key={pct}
+                      className="shortcut-btn"
+                      disabled={!balance}
+                      onClick={() => balance && setAmount(formatUSDmore((balance * BigInt(pct)) / 100n, 18))}
+                    >
+                      {pct}%
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="transaction-info">
+              {estimatedOutput > 0n && (
+                <div className="info-row">
+                  <span>Expected output</span>
+                  <span>{formatUSDmore(estimatedOutput)} {outputToken}</span>
+                </div>
+              )}
+              {globalData && (
+                <div className="info-row">
+                  <span>Backing ratio</span>
+                  <span>{globalData.backingRatio}x</span>
+                </div>
+              )}
+            </div>
+
+            <button
+              className={`submit-button burn btn-full${isPending || isConfirming ? " loading" : ""}`}
+              onClick={handleRedeem}
+              disabled={isPending || isConfirming || parsedAmount === 0n}
+            >
+              <span className="button-content">
+                {(isPending || isConfirming) && <span className="spinner" />}
+                {isPending ? "Confirming..." : isConfirming ? "Redeeming..." : "Redeem"}
+              </span>
+            </button>
+          </div>
         )}
       </div>
     </div>

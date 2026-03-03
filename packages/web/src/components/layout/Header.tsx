@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useGlobalContractData } from "../../hooks/useGlobalContractData";
-import { formatUSDmore } from "@gigasite/shared";
+import { formatUSDmore, shortenAddress } from "@gigasite/shared";
 import { StatusChip } from "../shared/StatusChip";
+import "./Header.css";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -14,42 +16,118 @@ const navLinks = [
 export function Header() {
   const { pathname } = useLocation();
   const { data } = useGlobalContractData();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const closeMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header className="border-b border-border px-6 py-3">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="font-heading text-xl font-bold text-secondary">
-            GigaVault
-          </Link>
-          <nav className="hidden md:flex items-center gap-6">
+    <header className="header">
+      <div className="header-content">
+        <Link to="/" className="header-logo" onClick={closeMenu}>
+          <div className="logo-text-container">
+            <span className="logo-text">GigaVault</span>
+            <span className="logo-subtitle">USDmore</span>
+          </div>
+        </Link>
+
+        {data && (
+          <div className="status-chips">
+            <StatusChip label="TVL" value={`$${formatUSDmore(data.reserve)}`} color="secondary" />
+            <StatusChip
+              label="Backing"
+              value={`${data.backingRatio}x`}
+              color={data.backingRatio >= "1.0000" ? "secondary" : "primary"}
+            />
+            <StatusChip label="Holders" value={String(data.holderCount)} color="text-secondary" />
+          </div>
+        )}
+
+        <nav className="nav-desktop">
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={`nav-link${pathname === link.to ? " active" : ""}`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="header-right">
+          <ConnectButton.Custom>
+            {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
+              const connected = mounted && account && chain;
+
+              if (!mounted) {
+                return (
+                  <button className="wallet-connect-btn" disabled>
+                    <span style={{ position: "relative", zIndex: 1 }}>Loading...</span>
+                  </button>
+                );
+              }
+
+              if (!connected) {
+                return (
+                  <button className="wallet-connect-btn" onClick={openConnectModal}>
+                    <span style={{ position: "relative", zIndex: 1 }}>Connect Wallet</span>
+                  </button>
+                );
+              }
+
+              if (chain.unsupported) {
+                return (
+                  <button className="wallet-wrong-network-btn" onClick={openChainModal}>
+                    <span className="warning-icon">⚠</span>
+                    Wrong Network
+                  </button>
+                );
+              }
+
+              return (
+                <button className="wallet-connected-btn" onClick={openAccountModal}>
+                  <span className="wallet-address-display">
+                    {shortenAddress(account.address)}
+                  </span>
+                </button>
+              );
+            }}
+          </ConnectButton.Custom>
+
+          <button
+            className="menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            <span className={`menu-icon${mobileMenuOpen ? " open" : ""}`} />
+          </button>
+        </div>
+
+        {mobileMenuOpen && (
+          <nav className="nav-mobile">
+            {data && (
+              <div className="nav-mobile-stats">
+                <StatusChip label="TVL" value={`$${formatUSDmore(data.reserve)}`} color="secondary" />
+                <StatusChip
+                  label="Backing"
+                  value={`${data.backingRatio}x`}
+                  color={data.backingRatio >= "1.0000" ? "secondary" : "primary"}
+                />
+              </div>
+            )}
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`text-sm font-medium transition-colors ${
-                  pathname === link.to ? "text-text-primary" : "text-text-muted hover:text-text-secondary"
-                }`}
+                className={`nav-link${pathname === link.to ? " active" : ""}`}
+                onClick={closeMenu}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
-        </div>
-        <div className="flex items-center gap-4">
-          {data && (
-            <div className="hidden lg:flex items-center gap-3">
-              <StatusChip label="TVL" value={`$${formatUSDmore(data.reserve)}`} color="secondary" />
-              <StatusChip
-                label="Backing"
-                value={`${data.backingRatio}x`}
-                color={data.backingRatio >= "1.0000" ? "secondary" : "primary"}
-              />
-              <StatusChip label="Holders" value={String(data.holderCount)} color="text-secondary" />
-            </div>
-          )}
-          <ConnectButton showBalance={false} chainStatus="icon" />
-        </div>
+        )}
       </div>
     </header>
   );

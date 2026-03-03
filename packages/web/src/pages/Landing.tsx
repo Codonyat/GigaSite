@@ -1,109 +1,154 @@
 import { useState } from "react";
-import { useGlobalContractData } from "../hooks/useGlobalContractData";
 import { useUserData } from "../hooks/useUserData";
-import { formatUSDmore } from "@gigasite/shared";
-import { DataStrip } from "../components/layout/DataStrip";
 import { MintModal } from "../components/modals/MintModal";
 import { RedeemModal } from "../components/modals/RedeemModal";
 import { ActivityFeed } from "../components/activity/ActivityFeed";
 import { DisplayFormattedNumber } from "../components/shared/DisplayFormattedNumber";
+import "./Landing.css";
 
 export function Landing() {
-  const { data, isLoading } = useGlobalContractData();
   const { userData, isConnected } = useUserData();
   const [showMint, setShowMint] = useState(false);
   const [showRedeem, setShowRedeem] = useState(false);
+  const [hoverState, setHoverState] = useState<"none" | "deposit" | "withdraw">("none");
+  const [flipped, setFlipped] = useState(false);
+
+  const coinContainerClass = [
+    "coin-container",
+    hoverState === "deposit" ? "hover-deposit" : "",
+    hoverState === "withdraw" ? "hover-withdraw" : "",
+    hoverState === "none" && flipped ? "flipped" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <>
-      <DataStrip />
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Hero */}
-        <section className="text-center mb-16">
-          <h1 className="font-heading text-4xl md:text-6xl font-bold mb-4">
-            <span className="text-secondary">USDmore</span>
-          </h1>
-          <p className="text-text-secondary text-lg mb-8 max-w-2xl mx-auto">
+    <div className="landing-page">
+      {/* Hero Section */}
+      <section className="page-header-section">
+        <div className="page-header-content">
+          <p className="page-tagline">
             Deposit USDmY. Earn lottery prizes. Win auctions. A 1% fee fuels daily rewards for all holders.
           </p>
-          <div className="flex items-center justify-center gap-4">
-            <button
-              onClick={() => setShowMint(true)}
-              className="px-8 py-3 rounded-lg bg-secondary text-bg font-heading font-bold text-lg hover:brightness-110 transition"
-            >
-              Mint
-            </button>
-            <button
-              onClick={() => setShowRedeem(true)}
-              className="px-8 py-3 rounded-lg border border-primary text-primary font-heading font-bold text-lg hover:bg-primary/10 transition"
-            >
-              Redeem
-            </button>
-          </div>
-        </section>
 
-        {/* Stats Grid */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          {isLoading ? (
-            Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-bg-card border border-border rounded-xl p-4 animate-pulse h-24" />
-            ))
-          ) : data ? (
-            <>
-              <StatCard label="Total Supply" value={formatUSDmore(data.totalSupply)} suffix=" USDmore" />
-              <StatCard label="Reserve (TVL)" value={`$${formatUSDmore(data.reserve)}`} />
-              <StatCard label="Backing Ratio" value={`${data.backingRatio}x`} />
-              <StatCard label="Holders" value={String(data.holderCount)} />
-            </>
-          ) : null}
-        </section>
-
-        {/* User balances */}
-        {isConnected && userData && (
-          <section className="bg-bg-card border border-border rounded-xl p-6 mb-12">
-            <h2 className="font-heading text-lg font-bold mb-4">Your Portfolio</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <p className="text-xs text-text-muted mb-1">USDmore</p>
-                <DisplayFormattedNumber value={userData.usdmoreBalance} className="text-lg font-heading font-bold" />
-              </div>
-              <div>
-                <p className="text-xs text-text-muted mb-1">USDmY</p>
-                <DisplayFormattedNumber value={userData.usdmyBalance} className="text-lg font-heading font-bold" />
-              </div>
-              <div>
-                <p className="text-xs text-text-muted mb-1">USDm</p>
-                <DisplayFormattedNumber value={userData.usdmBalance} className="text-lg font-heading font-bold" />
-              </div>
-              <div>
-                <p className="text-xs text-text-muted mb-1">Claimable Prizes</p>
-                <DisplayFormattedNumber
-                  value={userData.claimableAmount}
-                  className={`text-lg font-heading font-bold ${userData.claimableAmount > 0n ? "text-accent-gold" : ""}`}
-                />
+          {/* User Portfolio (above hero grid when connected) */}
+          {isConnected && userData && (
+            <div className="portfolio-section" style={{ width: "100%", maxWidth: "var(--max-width)" }}>
+              <h2 className="font-heading text-lg font-bold mb-4">Your Portfolio</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-xs text-text-muted mb-1">USDmore</p>
+                  <DisplayFormattedNumber value={userData.usdmoreBalance} className="text-lg font-heading font-bold" />
+                </div>
+                <div>
+                  <p className="text-xs text-text-muted mb-1">USDmY</p>
+                  <DisplayFormattedNumber value={userData.usdmyBalance} className="text-lg font-heading font-bold" />
+                </div>
+                <div>
+                  <p className="text-xs text-text-muted mb-1">USDm</p>
+                  <DisplayFormattedNumber value={userData.usdmBalance} className="text-lg font-heading font-bold" />
+                </div>
+                <div>
+                  <p className="text-xs text-text-muted mb-1">Claimable Prizes</p>
+                  <DisplayFormattedNumber
+                    value={userData.claimableAmount}
+                    className={`text-lg font-heading font-bold ${userData.claimableAmount > 0n ? "text-accent-gold" : ""}`}
+                  />
+                </div>
               </div>
             </div>
-          </section>
-        )}
+          )}
 
-        {/* Activity */}
-        <ActivityFeed />
-      </div>
+          {/* Hero Grid: Coin + Actions | Activity Feed */}
+          <div className="hero-content-grid" style={{ maxWidth: "var(--max-width)", width: "100%" }}>
+            <div className="hero-left">
+              <div className="coin-area">
+                <div className={coinContainerClass} onClick={() => setFlipped(!flipped)}>
+                  <div className="coin-face coin-native">
+                    <div className="coin-placeholder native">USDmY</div>
+                  </div>
+                  <div className="coin-face coin-strategy">
+                    <div className="coin-placeholder strategy">USDmore</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="coin-actions">
+                <button
+                  className="action-btn deposit-btn"
+                  onClick={() => setShowMint(true)}
+                  onMouseEnter={() => setHoverState("deposit")}
+                  onMouseLeave={() => setHoverState("none")}
+                >
+                  <span className="action-line">Deposit USDmY</span>
+                  <span className="action-line">Mint USDmore</span>
+                </button>
+                <button
+                  className="action-btn withdraw-btn"
+                  onClick={() => setShowRedeem(true)}
+                  onMouseEnter={() => setHoverState("withdraw")}
+                  onMouseLeave={() => setHoverState("none")}
+                >
+                  <span className="action-line">Burn USDmore</span>
+                  <span className="action-line">Withdraw USDmY</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="hero-right">
+              <ActivityFeed />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="explainer-section">
+        <div className="explainer-content">
+          <h2 className="section-title">How It Works</h2>
+          <div className="steps-grid">
+            <div className="step-card">
+              <div className="step-number">1</div>
+              <div className="step-content">
+                <div className="step-title">Deposit</div>
+                <div className="step-description">
+                  Deposit <strong>USDmY</strong> to mint <strong>USDmore</strong> tokens. A 1% fee is collected.
+                </div>
+              </div>
+            </div>
+            <div className="step-card">
+              <div className="step-number">2</div>
+              <div className="step-content">
+                <div className="step-title">Backing Grows</div>
+                <div className="step-description">
+                  Auction bids add USDmY to the reserve, increasing the <strong>backing ratio</strong> for all holders.
+                </div>
+              </div>
+            </div>
+            <div className="step-card">
+              <div className="step-number">3</div>
+              <div className="step-content">
+                <div className="step-title">Lottery</div>
+                <div className="step-description">
+                  Every 25 hours, <strong>31% of fees</strong> are awarded to a random holder via lottery.
+                </div>
+              </div>
+            </div>
+            <div className="step-card">
+              <div className="step-number">4</div>
+              <div className="step-content">
+                <div className="step-title">Withdraw</div>
+                <div className="step-description">
+                  Burn USDmore anytime to withdraw <strong>USDmY</strong> at the current backing ratio.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <MintModal isOpen={showMint} onClose={() => setShowMint(false)} />
       <RedeemModal isOpen={showRedeem} onClose={() => setShowRedeem(false)} />
-    </>
-  );
-}
-
-function StatCard({ label, value, suffix }: { label: string; value: string; suffix?: string }) {
-  return (
-    <div className="bg-bg-card border border-border rounded-xl p-4">
-      <p className="text-xs text-text-muted mb-1">{label}</p>
-      <p className="text-xl font-heading font-bold">
-        {value}
-        {suffix && <span className="text-sm text-text-muted">{suffix}</span>}
-      </p>
     </div>
   );
 }

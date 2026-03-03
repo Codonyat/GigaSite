@@ -4,7 +4,7 @@ enum TransactionType {
   TRANSFER
 }
 
-type Transaction @entity {
+type Transaction @entity(immutable: true) {
   id: ID! # txHash-logIndex
   type: TransactionType!
   user: User!
@@ -16,7 +16,7 @@ type Transaction @entity {
   day: BigInt!
 }
 
-type LotteryDraw @entity {
+type LotteryDraw @entity(immutable: false) {
   id: ID! # day number string
   winner: User!
   amount: BigInt!
@@ -28,7 +28,7 @@ type LotteryDraw @entity {
   auctionShare: BigInt!
 }
 
-type AuctionRound @entity {
+type AuctionRound @entity(immutable: false) {
   id: ID! # day number string
   tokenAmount: BigInt!
   minBid: BigInt!
@@ -41,7 +41,7 @@ type AuctionRound @entity {
   bids: [Bid!]! @derivedFrom(field: "round")
 }
 
-type Bid @entity {
+type Bid @entity(immutable: false) {
   id: ID! # txHash-logIndex
   round: AuctionRound!
   bidder: User!
@@ -50,7 +50,7 @@ type Bid @entity {
   refunded: Boolean!
 }
 
-type User @entity {
+type User @entity(immutable: false) {
   id: ID! # wallet address (hex)
   totalMinted: BigInt!
   totalRedeemed: BigInt!
@@ -65,7 +65,7 @@ type User @entity {
   transactions: [Transaction!]! @derivedFrom(field: "user")
 }
 
-type ProtocolStats @entity {
+type ProtocolStats @entity(immutable: false) {
   id: ID! # "protocol" singleton
   totalSupplyMinted: BigInt!
   totalSupplyBurned: BigInt!
@@ -77,7 +77,7 @@ type ProtocolStats @entity {
   totalBids: Int!
 }
 
-type DailyMetric @entity {
+type DailyMetric @entity(immutable: false) {
   id: ID! # day number string
   day: BigInt!
   mintVolume: BigInt!

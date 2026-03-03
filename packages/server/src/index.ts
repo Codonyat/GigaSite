@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { serve } from "@hono/node-server";
+import { getRequestListener } from "@hono/node-server";
 import { createApp } from "./app.js";
 import { createSocketServer } from "./websocket/index.js";
 import { createChainListener } from "./services/chain-listener.js";
@@ -9,7 +9,7 @@ import { env } from "./config/env.js";
 
 const app = createApp();
 
-const httpServer = createServer(app.fetch as any);
+const httpServer = createServer(getRequestListener(app.fetch));
 httpServer.listen(env.PORT, () => {
   console.log(`[server] Listening on http://localhost:${env.PORT}`);
 });

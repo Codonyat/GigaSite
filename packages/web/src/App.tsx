@@ -5,6 +5,7 @@ import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { wagmiConfig } from "./config/wagmi";
 import { Header } from "./components/layout/Header";
+import { DataStrip } from "./components/layout/DataStrip";
 import { Footer } from "./components/layout/Footer";
 import { Landing } from "./pages/Landing";
 import { Lottery } from "./pages/Lottery";
@@ -29,6 +30,7 @@ export function App() {
           <BrowserRouter>
             <div className="min-h-screen flex flex-col">
               <Header />
+              <DataStrip />
               <main className="flex-1">
                 <Routes>
                   <Route path="/" element={<Landing />} />

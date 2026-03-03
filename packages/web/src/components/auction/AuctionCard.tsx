@@ -9,14 +9,14 @@ export function AuctionCard() {
   const { data } = useGlobalContractData();
   const [showBidModal, setShowBidModal] = useState(false);
 
-  if (!data) return <div className="bg-bg-card border border-border rounded-xl p-6 animate-pulse h-48" />;
+  if (!data) return <div className="card-base animate-pulse" style={{ height: 192 }} />;
 
   const { currentAuction, isAuctionActive, effectiveMinBid } = data;
   const nextDayTimestamp = getNextDayTimestamp(contractConstants.deploymentTime, data.currentDay);
 
   return (
     <>
-      <div className="bg-bg-card border border-border rounded-xl p-6">
+      <div className="card-base">
         <h3 className="font-heading text-lg font-bold mb-4">Daily Auction</h3>
 
         {isAuctionActive ? (
@@ -35,32 +35,31 @@ export function AuctionCard() {
               </div>
             </div>
 
-            <div className="space-y-2 mb-4 text-sm">
-              <div className="flex justify-between">
-                <span className="text-text-muted">Current Bid</span>
-                <span className="text-accent-orange">
-                  {currentAuction.currentBid > 0n
-                    ? `${formatUSDmore(currentAuction.currentBid)} USDmY`
-                    : "No bids"}
-                </span>
+            <div className="info-row">
+              <span>Current Bid</span>
+              <span style={{ color: "var(--color-orange)" }}>
+                {currentAuction.currentBid > 0n
+                  ? `${formatUSDmore(currentAuction.currentBid)} USDmY`
+                  : "No bids"}
+              </span>
+            </div>
+            {currentAuction.currentBidder !== "0x0000000000000000000000000000000000000000" && (
+              <div className="info-row">
+                <span>Leading Bidder</span>
+                <span>{shortenAddress(currentAuction.currentBidder)}</span>
               </div>
-              {currentAuction.currentBidder !== "0x0000000000000000000000000000000000000000" && (
-                <div className="flex justify-between">
-                  <span className="text-text-muted">Leading Bidder</span>
-                  <span className="text-text-secondary">{shortenAddress(currentAuction.currentBidder)}</span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span className="text-text-muted">Min Next Bid</span>
-                <span className="text-text-secondary">{formatUSDmore(effectiveMinBid)} USDmY</span>
-              </div>
+            )}
+            <div className="info-row">
+              <span>Min Next Bid</span>
+              <span>{formatUSDmore(effectiveMinBid)} USDmY</span>
             </div>
 
             <button
               onClick={() => setShowBidModal(true)}
-              className="w-full py-3 rounded-lg bg-accent-orange text-bg font-medium"
+              className="btn btn-primary btn-full"
+              style={{ marginTop: "var(--spacing-md)", borderColor: "var(--color-orange)" }}
             >
-              Place Bid
+              <span>Place Bid</span>
             </button>
           </>
         ) : (
